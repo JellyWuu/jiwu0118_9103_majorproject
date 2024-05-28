@@ -3,15 +3,16 @@ let initialDotNumber = 60;
 let dotNumberDecrement = 5;
 
 function setup() {
-  createCanvas(500, 500);
+  createCanvas(windowWidth, windowHeight);
   colorMode(HSB);
   noLoop();
 }
 
 function draw() {
   background(195, 99, 40);
+  scale(1.8);
   translate(width / 2, height / 2);
-  rotate(PI / 3);
+  rotate(PI / 12);
   translate(-width / 2 - 80, -height / 2 - 80);
 
   let spacing = 160;
@@ -51,20 +52,20 @@ function drawWheels(x, y, radius) {
   if (drawLines) {
     let numLines = 70;
     stroke(random(360), 50, 60);
-    strokeWeight(2);
-    noFill(); // Ensure the shape is not filled
+    strokeWeight(1.5);
+    noFill();
 
-    beginShape(); // Begin defining a shape
+    beginShape();
     for (let k = 0; k < numLines; k++) {
       let angle = TWO_PI / numLines * k;
-      let startX = x + cos(angle) * radius * 0.65;
-      let startY = y + sin(angle) * radius * 0.65;
-      let endX = x + cos(angle) * radius * 0.99;
-      let endY = y + sin(angle) * radius * 0.99;
-      vertex(startX, startY); // Define vertex
-      vertex(endX, endY); // Define vertex
+      let startX = x + cos(angle) * radius * 0.7;
+      let startY = y + sin(angle) * radius * 0.7;
+      let endX = x + cos(angle) * radius * 0.94;
+      let endY = y + sin(angle) * radius * 0.94;
+      vertex(startX, startY);
+      vertex(endX, endY);
     }
-    endShape(CLOSE); // End shape definition and close shape
+    endShape(CLOSE);
 
     let dotColor = color(random(360), 50, 60);
 
@@ -102,7 +103,8 @@ function drawWheels(x, y, radius) {
   for (let i = 0; i < numInnerCircles; i++) {
     let innerRadius = radius * 0.5 * (1 - i * 0.2);
     fill(color(random(330), 50, random(30, 90)));
-    noStroke();
+    stroke(color(random(330), 50, random(30, 90)));
+    strokeWeight(1)
     ellipse(x, y, innerRadius * 1.8);
   }
 
@@ -116,4 +118,8 @@ function drawWheels(x, y, radius) {
     let endAngle = PI;
     arc(x, y - radius, arcRadius, arcRadius, startAngle, endAngle);
   }
+}
+
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
 }
