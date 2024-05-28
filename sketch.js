@@ -1,11 +1,29 @@
 let circleRadius = 75;
 let initialDotNumber = 60;
 let dotNumberDecrement = 5;
+let noiseOffsets = [];
+let seeds = [];
+let noiseLocations = [];
+let patterns = [];
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
   colorMode(HSB);
-  noLoop();
+
+  let spacing = 160;
+  let rows = height / spacing;
+  let cols = width / spacing;
+  for (let i = 0; i <= rows; i++) {
+    for (let j = 0; j <= cols; j++) {
+      let x = j * spacing + spacing / 2;
+      let y = i * spacing + spacing / 2;
+      let pattern = { x, y, radius: circleRadius };
+      patterns.push(pattern);
+      noiseOffsets.push({ x: random(1000), y: random(1000) });
+      seeds.push(random(1000));
+      noiseLocations.push(random(1000));
+    }
+  }
 }
 
 function draw() {
@@ -15,17 +33,22 @@ function draw() {
   rotate(PI / 12);
   translate(-width / 2 - 80, -height / 2 - 80);
 
-  let spacing = 160;
-  let rows = height / spacing;
-  let cols = width / spacing;
-  for (let i = 0; i <= rows; i++) {
-    for (let j = 0; j <= cols; j++) {
-      let x = j * spacing + spacing / 2;
-      let y = i * spacing + spacing / 2;
-      drawWheels(x, y, circleRadius);
-    }
+  for (let i = 0; i < patterns.length; i++) {
+    let pattern = patterns[i];
+    let [noisyX, noisyY] = getNoisyPosition(pattern.x, pattern.y, noiseOffsets[i], noiseLocations[i]);
+    randomSeed(seeds[i]);
+    drawWheels(noisyX, noisyY, pattern.radius);
+    noiseLocations[i] += 0.01;
   }
 }
+
+function getNoisyPosition(x, y, offset, noiseLocation) {
+  let noiseX = (noise(noiseLocation + offset.x) - 0.5) * 30;
+  let noiseY = (noise(noiseLocation + offset.y) - 0.5) * 30;
+  return [x + noiseX, y + noiseY];
+}
+
+
 
 function drawWheels(x, y, radius) {
   // Draw line or dots
