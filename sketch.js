@@ -7,10 +7,10 @@ let noiseLocations = [];
 let patterns = [];
 
 function setup() {
-  createCanvas(windowWidth, windowHeight);
+  createCanvas(800, 800);
   colorMode(HSB);
 
-  let spacing = 180;
+  let spacing = 190;
   let rows = height / spacing;
   let cols = width / spacing;
   for (let i = 0; i <= rows; i++) {
@@ -28,17 +28,43 @@ function setup() {
 
 function draw() {
   background(195, 99, 40);
-  scale(1.6);
-  translate(width / 2, height / 2);
-  rotate(PI / 12);
-  translate(-width / 2 - 80, -height / 2 - 80);
+  drawBackgroundLines();
 
+  translate(width / 2, height / 2);
+  rotate(PI / 4);
+  translate(-width / 2 - 80, -height / 2 - 80);
+  //wheels noise moving
   for (let i = 0; i < patterns.length; i++) {
     let pattern = patterns[i];
+    let distanceToCenter = dist(pattern.x, pattern.y, width / 2, height / 2);
+    let wheelScale = map(distanceToCenter, 0, max(width, height), 0.5, 2);
+    let scaleRadius = circleRadius * wheelScale;
     let [noisyX, noisyY] = getNoisyPosition(pattern.x, pattern.y, noiseOffsets[i], noiseLocations[i]);
     randomSeed(seeds[i]);
-    drawWheels(noisyX, noisyY, pattern.radius, noiseLocations[i]);
+    drawWheels(noisyX, noisyY, scaleRadius, noiseLocations[i], wheelScale);
     noiseLocations[i] += 0.01;
+  }
+}
+//draw universal black hole
+function drawBackgroundLines() {
+  let backgroundX = width / 2;
+  let backgroundY = height / 2;
+
+  let angleIncrement = 0.02;
+  for (let angle = 0; angle < TWO_PI; angle += angleIncrement) {
+    let outerRadius = (width / 2) * 1.5;
+    let noiseValue = noise(cos(angle) * 5 + 100, sin(angle) * 5 + 100);
+    let radiusOffset = map(noiseValue, 0, 1, -50, 50);
+    let innerRadius = outerRadius * 0.1 + radiusOffset;
+
+    let x1 = backgroundX + cos(angle) * innerRadius;
+    let y1 = backgroundX + sin(angle) * innerRadius;
+    let x2 = backgroundY + cos(angle) * outerRadius;
+    let y2 = backgroundY + sin(angle) * outerRadius;
+
+    stroke(0, 0, 0, 0.5);
+    strokeWeight(1);
+    line(x1, y1, x2, y2);
   }
 }
 
@@ -48,45 +74,41 @@ function getNoisyPosition(x, y, offset, noiseLocation) {
   return [x + noiseX, y + noiseY];
 }
 
-
-
-function drawWheels(x, y, radius, t) {
-  // Draw line or dots
+function drawWheels(x, y, radius, t, wheelScale) {
   let drawLines = random(1) > 0.5;
-  // Whether to draw arc
   let drawArcs = random(1) > 0.8;
   let numDotRings = 5;
   let dotNumber = [];
 
-  // The number of dots per ring
   for (let i = 0; i < numDotRings; i++) {
     let currentDotNumber = initialDotNumber - i * dotNumberDecrement;
     dotNumber.push(currentDotNumber);
   }
 
-  // Outermost ring
-  let ringRadius = radius;
+  push();
+  let baseRadius = radius;
   let noiseScale = 0.5;
-  fill(50, random(0, 30), 95);
+
+  fill(color(50, random(0, 30), 95));
   noStroke();
   beginShape();
   for (let i = 0; i < TWO_PI; i += 0.1) {
     let noiseValue = noise(cos(i) * noiseScale, sin(i) * noiseScale, t);
-    let r = map(noiseValue, 0, 1, ringRadius - 20, ringRadius + 20);
+    let r = map(noiseValue, 0, 1, baseRadius - 20, baseRadius + 20);
     let xOffset = r * cos(i);
     let yOffset = r * sin(i);
     vertex(x + xOffset, y + yOffset);
   }
   endShape(CLOSE);
 
-  // Using if-else to draw two different kinds of wheels
   if (drawLines) {
     let numLines = 70;
     stroke(random(360), 50, 60);
-    strokeWeight(1.5);
+    strokeWeight(1.5 * wheelScale);
     noFill();
-
     beginShape();
+
+    fill(50, random(0, 30), 95, 0.1);
     for (let k = 0; k < numLines; k++) {
       let angle = TWO_PI / numLines * k;
       let startX = x + cos(angle) * radius * 0.7;
@@ -109,11 +131,11 @@ function drawWheels(x, y, radius, t) {
         let dotY = y + sin(angle) * dotRingRadius * 0.63;
         fill(dotColor);
         noStroke();
-        ellipse(dotX, dotY, 5);
+        ellipse(dotX, dotY, 5 * wheelScale);
       }
     }
   } else {
-    let dotColor = color(random(360), 50, 60);
+    let dotColor = color(random(360), 60, 60);
 
     for (let i = 0; i < numDotRings; i++) {
       let dotRingRadius = radius * (1 - i * 0.1);
@@ -124,33 +146,33 @@ function drawWheels(x, y, radius, t) {
         let dotY = y + sin(angle) * dotRingRadius * 0.95;
         fill(dotColor);
         noStroke();
-        ellipse(dotX, dotY, 6);
+        ellipse(dotX, dotY, 6 * wheelScale);
       }
     }
   }
 
-  // Center circle 
   let numInnerCircles = 5;
   for (let i = 0; i < numInnerCircles; i++) {
     let innerRadius = radius * 0.5 * (1 - i * 0.2);
     fill(color(random(330), 50, random(30, 90)));
     stroke(color(random(330), 50, random(30, 90)));
-    strokeWeight(1)
-    ellipse(x, y, innerRadius * 1.8);
+    strokeWeight(1 * wheelScale);
+    ellipse(x, y, innerRadius * 1.8 * wheelScale);
   }
 
-  // Pink arcs
   if (drawArcs) {
     stroke(348, 63, 90);
-    strokeWeight(4);
+    strokeWeight(4 * wheelScale);
     noFill();
     let arcRadius = radius * 2;
     let startAngle = PI / 2;
     let endAngle = PI;
-    arc(x, y - radius, arcRadius, arcRadius, startAngle, endAngle);
+    arc(x, y - radius * wheelScale, arcRadius * wheelScale, arcRadius * wheelScale, startAngle, endAngle);
   }
+
+  pop();
 }
 
 function windowResized() {
-  resizeCanvas(windowWidth, windowHeight);
+  resizeCanvas(800, 800);
 }
