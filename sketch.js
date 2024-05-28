@@ -10,7 +10,7 @@ function setup() {
   createCanvas(windowWidth, windowHeight);
   colorMode(HSB);
 
-  let spacing = 160;
+  let spacing = 180;
   let rows = height / spacing;
   let cols = width / spacing;
   for (let i = 0; i <= rows; i++) {
@@ -28,7 +28,7 @@ function setup() {
 
 function draw() {
   background(195, 99, 40);
-  scale(1.8);
+  scale(1.6);
   translate(width / 2, height / 2);
   rotate(PI / 12);
   translate(-width / 2 - 80, -height / 2 - 80);
@@ -37,7 +37,7 @@ function draw() {
     let pattern = patterns[i];
     let [noisyX, noisyY] = getNoisyPosition(pattern.x, pattern.y, noiseOffsets[i], noiseLocations[i]);
     randomSeed(seeds[i]);
-    drawWheels(noisyX, noisyY, pattern.radius);
+    drawWheels(noisyX, noisyY, pattern.radius, noiseLocations[i]);
     noiseLocations[i] += 0.01;
   }
 }
@@ -50,7 +50,7 @@ function getNoisyPosition(x, y, offset, noiseLocation) {
 
 
 
-function drawWheels(x, y, radius) {
+function drawWheels(x, y, radius, t) {
   // Draw line or dots
   let drawLines = random(1) > 0.5;
   // Whether to draw arc
@@ -66,10 +66,18 @@ function drawWheels(x, y, radius) {
 
   // Outermost ring
   let ringRadius = radius;
-  let col = color(50, random(0, 30), 95);
-  fill(col);
+  let noiseScale = 0.5;
+  fill(50, random(0, 30), 95);
   noStroke();
-  ellipse(x, y, ringRadius * 2);
+  beginShape();
+  for (let i = 0; i < TWO_PI; i += 0.1) {
+    let noiseValue = noise(cos(i) * noiseScale, sin(i) * noiseScale, t);
+    let r = map(noiseValue, 0, 1, ringRadius - 20, ringRadius + 20);
+    let xOffset = r * cos(i);
+    let yOffset = r * sin(i);
+    vertex(x + xOffset, y + yOffset);
+  }
+  endShape(CLOSE);
 
   // Using if-else to draw two different kinds of wheels
   if (drawLines) {
