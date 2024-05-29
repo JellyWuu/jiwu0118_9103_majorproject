@@ -5,6 +5,7 @@ let noiseOffsets = [];
 let seeds = [];
 let noiseLocations = [];
 let patterns = [];
+let backgroundNoiseTime = 0;
 
 function setup() {
   createCanvas(800, 800);
@@ -42,8 +43,9 @@ function draw() {
     let [noisyX, noisyY] = getNoisyPosition(pattern.x, pattern.y, noiseOffsets[i], noiseLocations[i]);
     randomSeed(seeds[i]);
     drawWheels(noisyX, noisyY, scaleRadius, noiseLocations[i], wheelScale);
-    noiseLocations[i] += 0.01;
+    noiseLocations[i] += 0.015;
   }
+  backgroundNoiseTime += 0.01;
 }
 //draw universal black hole
 function drawBackgroundLines() {
@@ -53,7 +55,7 @@ function drawBackgroundLines() {
   let angleIncrement = 0.02;
   for (let angle = 0; angle < TWO_PI; angle += angleIncrement) {
     let outerRadius = (width / 2) * 1.5;
-    let noiseValue = noise(cos(angle) * 5 + 100, sin(angle) * 5 + 100);
+    let noiseValue = noise(cos(angle) * 5 + backgroundNoiseTime, sin(angle) * 5 + backgroundNoiseTime);
     let radiusOffset = map(noiseValue, 0, 1, -50, 50);
     let innerRadius = outerRadius * 0.1 + radiusOffset;
 
