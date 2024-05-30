@@ -69,24 +69,28 @@ function drawBackgroundLines() {
     line(x1, y1, x2, y2);
   }
 }
-
+//Wheel overall generates offsets
+//Refer to  week 10 tutorial
 function getNoisyPosition(x, y, offset, noiseLocation) {
   let noiseX = (noise(noiseLocation + offset.x) - 0.5) * 30;
   let noiseY = (noise(noiseLocation + offset.y) - 0.5) * 30;
   return [x + noiseX, y + noiseY];
 }
-
+//////Wheel's element//////
 function drawWheels(x, y, radius, t, wheelScale) {
+  // Draw line or dots
   let drawLines = random(1) > 0.5;
+  // Whether to draw arc
   let drawArcs = random(1) > 0.8;
   let numDotRings = 5;
   let dotNumber = [];
-
+  // The number of dots per ring
   for (let i = 0; i < numDotRings; i++) {
     let currentDotNumber = initialDotNumber - i * dotNumberDecrement;
     dotNumber.push(currentDotNumber);
   }
-
+  // Outermost ring
+  //Replaced ellipse with vertex for outmost ring
   push();
   let baseRadius = radius;
   let noiseScale = 0.5;
@@ -102,7 +106,7 @@ function drawWheels(x, y, radius, t, wheelScale) {
     vertex(x + xOffset, y + yOffset);
   }
   endShape(CLOSE);
-
+  // Using if-else to draw two different kinds of wheels
   if (drawLines) {
     let numLines = 70;
     stroke(random(360), 50, 60);
@@ -152,7 +156,7 @@ function drawWheels(x, y, radius, t, wheelScale) {
       }
     }
   }
-
+  // Center circle 
   let numInnerCircles = 5;
   for (let i = 0; i < numInnerCircles; i++) {
     let innerRadius = radius * 0.5 * (1 - i * 0.2);
@@ -161,7 +165,7 @@ function drawWheels(x, y, radius, t, wheelScale) {
     strokeWeight(1 * wheelScale);
     ellipse(x, y, innerRadius * 1.8 * wheelScale);
   }
-
+  // Pink arcs
   if (drawArcs) {
     stroke(348, 63, 90);
     strokeWeight(4 * wheelScale);
