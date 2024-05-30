@@ -16,13 +16,14 @@ My work is named **Destiny in the Universe**. The animation starts automatically
 - **Inspiration**
 
 <img src="readmeImage/circle.jpeg" alt="Inspiration 01" width="300">
-<img src="readmeImage/circle2.jpg" alt="Inspiration 01" width="300">
 
 [*Inspiration 01*](https://www.pinterest.com.au/pin/314196511489863739/)
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-[*Inspiration 02*](http://xhslink.com/f6RdQK)
 
 Inspiration 01: This image inspired the theme of my artwork, it gives me the feeling of a universal black hole. The irregular circular background can be realized by my animation theme: perlin noise, and the different sizes of the circles also create a sense of perspective in the image.
+
+<img src="readmeImage/circle2.jpg" alt="Inspiration 01" width="300">
+
+[*Inspiration 02*](http://xhslink.com/f6RdQK)
 
 Inspiration 02: Both this image and siri inspired me to change circle base, which floats around the edges and different colors are overlaid to create different effects. So I changed the edges of the wheel based on this inspiration
 
